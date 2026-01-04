@@ -4,3 +4,12 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+
+[features]
+default=["auto_impl_arith", "auto_impl_bit"]
+auto_impl_arith=[]
+auto_impl_arith_inner=["auto_impl_arith"]
+auto_impl_arith_all=["auto_impl_arith_inner"]
+auto_impl_bit=[]
+auto_impl_bit_inner=["auto_impl_bit"]
+default_bit_all=["auto_impl_bit_inner"]

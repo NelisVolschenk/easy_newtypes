@@ -65,79 +65,42 @@ macro_rules! impl_block {
         crate::arith::unsigned_impl!($name);
         crate::arith::signed_impl!($name);
     };
-    
+
     ("arith_inner", $name: ident, $inner_type:tt) => {
         crate::arith::unsigned_impl_inner!($name, $inner_type);
     }
+
+
 }
-
-#[derive(Clone)]
-struct Test(u8);
-
-impl Add for Test {
-    type Output = Self;
-
-    fn add(self, rhs: Self) -> Self::Output {
-        Self(self.0 + rhs.0)
-    }
-}
-
-impl core::ops::Neg for Test {
-    type Output = ();
-
-    fn neg(self) -> Self::Output {
-        todo!()
-    }
-}
-
-//
-// impl Add<u8> for Test {
-//     type Output = Self;
-//
-//     fn add(self, rhs: u8) -> Self::Output {
-//         Self(self.0 + rhs)
-//     }
-// }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    new_t!(Basic, u8);
-    new_t!(WithDer, u8, derives = [Clone, Copy]);
-    new_t!(ModbusId, u32, derives = [Clone, Copy, Debug], impls = ["arith", "arith_inner"]);
-
-    #[test]
-    fn manual() {
-        let t1 = Test(5);
-        let t2 = Test(7);
-        let tres = t1 + t2;
-        assert_eq!(tres.0, 5+7)
-    }
+    new_t!(Unsigned, u32, derives = [Clone, Copy, Debug], impls = ["arith", "arith_inner"]);
 
     #[test]
     fn normal_add() {
-        let val1 = ModbusId(5);
-        let val2 = ModbusId(7);
+        let val1 = Unsigned(5);
+        let val2 = Unsigned(7);
         let v_res = val1 + val2;
         assert_eq!(v_res.0, 5+7)
     }
 
     #[test]
     fn add_assign() {
-        let mut val1 = ModbusId(5);
-        let val2 = ModbusId(7);
+        let mut val1 = Unsigned(5);
+        let val2 = Unsigned(7);
         val1 += val2;
         assert_eq!(val1.0, 5+7)
     }
 
     #[test]
     fn inner_add() {
-        let val1 = ModbusId(5);
+        let val1 = Unsigned(5);
         let val2 = 7;
         let v_res = val1 + val2;
         assert_eq!(v_res.0, 5+7)
     }
 
-    
-    
+
 }
